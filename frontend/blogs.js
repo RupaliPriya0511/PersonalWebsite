@@ -101,31 +101,25 @@ function openBlogForm() {
   async function fetchAndRenderBlogs() {
     const container = document.getElementById("blog-list");
     container.innerHTML = "";
-  
     try {
       const response = await fetch("http://localhost:5000/blogs");
       const blogs = await response.json();
-  
-      blogs.reverse().forEach(blog => {
+      blogs.forEach(blog => {
         const blogCard = document.createElement("div");
         blogCard.className = "blog-card";
         blogCard.setAttribute("data-id", blog._id);
-        console.log("Rendered Blog ID:", blog._id);
-
-  
         blogCard.innerHTML = `
-          ${blog.imageUrl ? `<img src="http://localhost:5000${blog.imageUrl}" class="blog-img" alt="blog image">` : ""}
-          <div class="blog-info" >
+          ${blog.imageUrl ? `<img src=\"http://localhost:5000${blog.imageUrl}\" class=\"blog-img\" alt=\"blog image\">` : ""}
+          <div class=\"blog-info\" >
             <h3>${blog.title}</h3>
-            <p class="blog-date">${new Date(blog.date).toLocaleDateString()}</p>
-            <p class="blog-snippet">${blog.content.substring(0, 200)}${blog.content.length > 200 ? "..." : ""}</p>
-            <button class="read-more-btn" onclick="toggleFullContent(this)">Read More</button>
-            <p class="blog-full-content" style="display: none;">${blog.content}</p>
-            <button class="remove-btn" onclick="requestDeleteBlog(this)">Remove</button>
+            <p class=\"blog-date\">${formatDate(blog.date)}</p>
+            <p class=\"blog-snippet\">${blog.content.substring(0, 200)}${blog.content.length > 200 ? "..." : ""}</p>
+            <button class=\"read-more-btn\" onclick=\"toggleFullContent(this)\">Read More</button>
+            <p class=\"blog-full-content\" style=\"display: none;\">${blog.content}</p>
+            <button class=\"remove-btn\" onclick=\"requestDeleteBlog(this)\">Remove</button>
           </div>
         `;
-  
-        container.prepend(blogCard);
+        container.appendChild(blogCard);
       });
     } catch (error) {
       console.error("Error fetching blogs:", error);
@@ -174,6 +168,31 @@ async function requestDeleteBlog(button) {
     console.error("Error deleting blog:", error);
     alert("An unexpected error occurred: " + error.message);
   }
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+function addBlogToUI(blog) {
+    const container = document.getElementById("blog-list");
+    const blogCard = document.createElement("div");
+    blogCard.className = "blog-card";
+    blogCard.setAttribute("data-id", blog._id);
+    blogCard.innerHTML = `
+      ${blog.imageUrl ? `<img src="http://localhost:5000${blog.imageUrl}" class="blog-img" alt="blog image">` : ""}
+      <div class="blog-info" >
+        <h3>${blog.title}</h3>
+        <p class="blog-date">${formatDate(blog.date)}</p>
+        <p class="blog-snippet">${blog.content.substring(0, 200)}${blog.content.length > 200 ? "..." : ""}</p>
+        <button class="read-more-btn" onclick="toggleFullContent(this)">Read More</button>
+        <p class="blog-full-content" style="display: none;">${blog.content}</p>
+        <button class="remove-btn" onclick="requestDeleteBlog(this)">Remove</button>
+      </div>
+    `;
+    container.prepend(blogCard);
 }
 
 
