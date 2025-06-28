@@ -89,7 +89,8 @@
 
 
 
-const BASE_URL = 'http://localhost:5000';
+// const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://rupali-portfolio05.onrender.com';
 
 //Open Add Project Form
 function openForm() {
