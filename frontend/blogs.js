@@ -45,7 +45,7 @@
 
 
 
-
+const BASE_URL = 'https://rupali-portfolio05.onrender.com';
 
 
 function openBlogForm() {
@@ -79,7 +79,7 @@ function openBlogForm() {
     }
   
     try {
-      const response = await fetch("http://localhost:5000/blogs", {
+      const response = await fetch(`${BASE_URL}/blogs`, {
         method: "POST",
         body: formData,
       });
@@ -102,14 +102,14 @@ function openBlogForm() {
     const container = document.getElementById("blog-list");
     container.innerHTML = "";
     try {
-      const response = await fetch("http://localhost:5000/blogs");
+      const response = await fetch(`${BASE_URL}/blogs`);
       const blogs = await response.json();
       blogs.forEach(blog => {
         const blogCard = document.createElement("div");
         blogCard.className = "blog-card";
         blogCard.setAttribute("data-id", blog._id);
         blogCard.innerHTML = `
-          ${blog.imageUrl ? `<img src=\"http://localhost:5000${blog.imageUrl}\" class=\"blog-img\" alt=\"blog image\">` : ""}
+          ${blog.imageUrl ? `<img src=\"${BASE_URL}${blog.imageUrl}" class=\"blog-img\" alt=\"blog image\">` : ""}
           <div class=\"blog-info\" >
             <h3>${blog.title}</h3>
             <p class=\"blog-date\">${formatDate(blog.date)}</p>
